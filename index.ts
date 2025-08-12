@@ -15,10 +15,8 @@ app.post("/analyze", async (req: Request, res: Response) => {
     if (!url || !url.startsWith("http")) {
       return res.status(400).json({ error: "Valid URL is required" });
     }
-    const [puppeteerData, lighthouseData] = await Promise.all([
-      analyzeWebsite(url),
-      runLighthouse(url),
-    ]);
+    const lighthouseData = await runLighthouse(url);
+    const puppeteerData = await analyzeWebsite(url);
 
     if ("error" in lighthouseData) {
       return res.status(500).json({ error: lighthouseData.error });
