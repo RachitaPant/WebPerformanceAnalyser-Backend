@@ -22,7 +22,15 @@ export async function runLighthouse(
   try {
     const chromeInstance = await chromeLauncher.launch({
       chromePath: executablePath,
-      chromeFlags: [...chrome.args, "--disable-gpu"], // Add for optimization
+      chromeFlags: [
+        ...chrome.args,
+        "--disable-gpu",
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-dev-shm-usage",
+        "--single-process",
+        "--no-zygote",
+      ],
     });
     const options: {
       logLevel: "info";

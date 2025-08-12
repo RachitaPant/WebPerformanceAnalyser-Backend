@@ -12,9 +12,17 @@ type LongTaskEntry = {
 export async function analyzeWebsite(url: string) {
   const executablePath = (await chrome.executablePath) || chromium.path;
   const browser = await puppeteer.launch({
-    args: [...chrome.args, "--disable-gpu"],
+    args: [
+      ...chrome.args,
+      "--disable-gpu",
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-dev-shm-usage",
+      "--single-process",
+      "--no-zygote",
+    ],
     executablePath,
-    headless: chrome.headless,
+    headless: true,
   });
 
   const page = await browser.newPage();
