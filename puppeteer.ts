@@ -1,5 +1,7 @@
 import puppeteer from "puppeteer-core";
 import chrome from "chrome-aws-lambda";
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const chromium: any = require("chromium");
 
 type LongTaskEntry = {
   name: string;
@@ -8,9 +10,10 @@ type LongTaskEntry = {
 };
 
 export async function analyzeWebsite(url: string) {
+  const executablePath = (await chrome.executablePath) || chromium.path;
   const browser = await puppeteer.launch({
     args: [...chrome.args, "--disable-gpu"],
-    executablePath: await chrome.executablePath,
+    executablePath,
     headless: chrome.headless,
   });
 

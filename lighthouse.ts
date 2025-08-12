@@ -1,6 +1,8 @@
 import lighthouse from "lighthouse";
 import * as chromeLauncher from "chrome-launcher";
 import chrome from "chrome-aws-lambda";
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const chromium: any = require("chromium");
 
 import type { Result as LighthouseReport } from "lighthouse";
 
@@ -11,13 +13,15 @@ interface LighthouseResult {
 export async function runLighthouse(
   url: string
 ): Promise<LighthouseResult | { error: string }> {
+  const executablePath = (await chrome.executablePath) || chromium.path;
+
   if (!url) {
     return { error: "URL is required" };
   }
 
   try {
     const chromeInstance = await chromeLauncher.launch({
-      chromePath: await chrome.executablePath,
+      chromePath: executablePath,
       chromeFlags: [...chrome.args, "--disable-gpu"], // Add for optimization
     });
     const options: {
