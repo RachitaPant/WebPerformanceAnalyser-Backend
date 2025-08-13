@@ -2,6 +2,7 @@
   "name": "web-performance-analyser",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
