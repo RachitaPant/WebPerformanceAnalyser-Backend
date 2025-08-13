@@ -18,7 +18,7 @@
     "express": "^5.0.0",
     "lighthouse": "^12.8.1",
     "puppeteer-core": "^24.16.1",
-    "chrome-aws-lambda": "^23.0.0"
+    "chrome-aws-lambda": "^10.1.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
