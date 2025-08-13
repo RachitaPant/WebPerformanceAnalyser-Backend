@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
-import { analyzeWebsite } from "./puppeteer";
-import { runLighthouse } from "./lighthouse";
+import { analyzeWebsite } from "./puppeteer.js";
+import { runLighthouse } from "./lighthouse.js";
 import type { Request, Response } from "express";
 
 const app = express();
