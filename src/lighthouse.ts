@@ -1,6 +1,6 @@
 import lighthouse from "lighthouse";
 import * as chromeLauncher from "chrome-launcher";
-import chrome from "chrome-aws-lambda";
+import chromium from "@sparticuz/chromium";
 
 import type { Result as LighthouseReport } from "lighthouse";
 
@@ -17,16 +17,16 @@ export async function runLighthouse(
 
   let chromeInstance;
   try {
-    const chromePath = await chrome.executablePath;
+    const chromePath = await chromium.executablePath();
     console.log("Lighthouse chromePath:", chromePath);
     if (!chromePath) {
-      return { error: "chrome-aws-lambda returned null executablePath" };
+      return { error: "@sparticuz/chromium returned null executablePath" };
     }
 
     chromeInstance = await chromeLauncher.launch({
       chromePath,
       chromeFlags: [
-        ...chrome.args,
+        ...chromium.args,
         "--disable-gpu",
         "--no-sandbox",
         "--disable-setuid-sandbox",
@@ -35,6 +35,7 @@ export async function runLighthouse(
         "--no-zygote",
       ],
     });
+
     const options = {
       logLevel: "info" as const,
       onlyCategories: ["performance"],

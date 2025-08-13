@@ -1,5 +1,5 @@
 import puppeteer from "puppeteer-core";
-import chrome from "chrome-aws-lambda";
+import chromium from "@sparticuz/chromium";
 
 type LongTaskEntry = {
   name: string;
@@ -10,15 +10,15 @@ type LongTaskEntry = {
 export async function analyzeWebsite(url: string) {
   let browser;
   try {
-    const executablePath = await chrome.executablePath;
+    const executablePath = await chromium.executablePath();
     console.log("Puppeteer executablePath:", executablePath);
     if (!executablePath) {
-      throw new Error("chrome-aws-lambda returned null executablePath");
+      throw new Error("@sparticuz/chromium returned null executablePath");
     }
 
     browser = await puppeteer.launch({
       args: [
-        ...chrome.args,
+        ...chromium.args,
         "--disable-gpu",
         "--no-sandbox",
         "--disable-setuid-sandbox",
