@@ -1,11 +1,11 @@
 {
-  "name": "backend-server",
+  "name": "web-performance-analyser",
   "version": "1.0.0",
-  "main": "index.ts",
+  "main": "index.js",
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
-    "dev": "node --loader ts-node/esm index.ts",
+    "dev": "node --loader ts-node/esm src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -13,18 +13,20 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "chrome-aws-lambda": "^10.1.0",
     "chrome-launcher": "^1.2.0",
-    "chromium": "^3.0.2",
     "cors": "^2.8.5",
-    "express": "^5.1.0",
+    "express": "^5.0.0",
     "lighthouse": "^12.8.1",
-    "puppeteer-core": "^24.16.1"
+    "puppeteer-core": "^24.16.1",
+    "chrome-aws-lambda": "^23.0.0"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.19",
-    "@types/express": "^5.0.3",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.9.2"
+    "typescript": "^5.5.4"
+  },
+  "engines": {
+    "node": "20.x"
   }
 }

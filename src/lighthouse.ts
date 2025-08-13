@@ -1,8 +1,6 @@
 import lighthouse from "lighthouse";
 import * as chromeLauncher from "chrome-launcher";
 import chrome from "chrome-aws-lambda";
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const chromium: any = require("chromium");
 
 import type { Result as LighthouseReport } from "lighthouse";
 
@@ -13,15 +11,20 @@ interface LighthouseResult {
 export async function runLighthouse(
   url: string
 ): Promise<LighthouseResult | { error: string }> {
-  const executablePath = (await chrome.executablePath) || chromium.path;
-
   if (!url) {
     return { error: "URL is required" };
   }
 
+  let chromeInstance;
   try {
-    const chromeInstance = await chromeLauncher.launch({
-      chromePath: executablePath,
+    const chromePath = await chrome.executablePath;
+    console.log("Lighthouse chromePath:", chromePath);
+    if (!chromePath) {
+      return { error: "chrome-aws-lambda returned null executablePath" };
+    }
+
+    chromeInstance = await chromeLauncher.launch({
+      chromePath,
       chromeFlags: [
         ...chrome.args,
         "--disable-gpu",
@@ -32,19 +35,16 @@ export async function runLighthouse(
         "--no-zygote",
       ],
     });
-    const options: {
-      logLevel: "info";
-      onlyCategories: string[];
-      port: number;
-    } = {
-      logLevel: "info",
-      onlyCategories: ["performance", "accessibility", "best-practices", "seo"],
+    const options = {
+      logLevel: "info" as const,
+      onlyCategories: ["performance"],
       port: chromeInstance.port,
+      throttlingMethod: "provided" as const,
+      output: "json" as const,
+      maxWaitForLoad: 10000,
     };
 
     const runnerResult = await lighthouse(url, options);
-
-    await chromeInstance.kill();
 
     if (!runnerResult) {
       return { error: "Lighthouse did not return a result" };
@@ -54,6 +54,8 @@ export async function runLighthouse(
   } catch (error: unknown) {
     console.error("Lighthouse error:", error);
     const message = error instanceof Error ? error.message : "Unknown error";
-    return { error: `Lighthouse analysis failed: ${message}` };
+    return { error: `Lighthouse analysis failed: ${message} ` };
+  } finally {
+    if (chromeInstance) await chromeInstance.kill();
   }
 }

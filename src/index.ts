@@ -1,12 +1,17 @@
 import express from "express";
 import cors from "cors";
-import { analyzeWebsite } from "./puppeteer.js";
-import { runLighthouse } from "./lighthouse.js";
+import { analyzeWebsite } from "./puppeteer";
+import { runLighthouse } from "./lighthouse";
 import type { Request, Response } from "express";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+app.use((req, res, next) => {
+  req.setTimeout(60000); // 60s timeout
+  next();
+});
 
 app.post("/analyze", async (req: Request, res: Response) => {
   try {
@@ -15,8 +20,9 @@ app.post("/analyze", async (req: Request, res: Response) => {
     if (!url || !url.startsWith("http")) {
       return res.status(400).json({ error: "Valid URL is required" });
     }
-    const lighthouseData = await runLighthouse(url);
+
     const puppeteerData = await analyzeWebsite(url);
+    const lighthouseData = await runLighthouse(url);
 
     if ("error" in lighthouseData) {
       return res.status(500).json({ error: lighthouseData.error });
@@ -29,7 +35,7 @@ app.post("/analyze", async (req: Request, res: Response) => {
   }
 });
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Analysis backend listening on port ${PORT}`);
 });
