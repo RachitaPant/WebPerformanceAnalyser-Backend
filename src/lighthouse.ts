@@ -42,9 +42,8 @@ export async function runLighthouse(
       port: chromeInstance.port,
       throttlingMethod: "provided" as const,
       output: "json" as const,
-      maxWaitForLoad: 10000,
+      maxWaitForLoad: 30000,
     };
-
     const runnerResult = await lighthouse(url, options);
 
     if (!runnerResult) {
@@ -55,8 +54,15 @@ export async function runLighthouse(
   } catch (error: unknown) {
     console.error("Lighthouse error:", error);
     const message = error instanceof Error ? error.message : "Unknown error";
-    return { error: `Lighthouse analysis failed: ${message} ` };
+    return { error: `Lighthouse analysis failed: ${message}` };
   } finally {
-    if (chromeInstance) await chromeInstance.kill();
+    if (chromeInstance) {
+      try {
+        await chromeInstance.kill();
+        console.log("Lighthouse Chrome instance closed successfully");
+      } catch (killError) {
+        console.error("Error closing Lighthouse Chrome instance:", killError);
+      }
+    }
   }
 }

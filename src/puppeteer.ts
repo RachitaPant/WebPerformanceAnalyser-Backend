@@ -32,7 +32,6 @@ export async function analyzeWebsite(url: string) {
 
     const page = await browser.newPage();
 
-    // Block heavy resources
     await page.setRequestInterception(true);
     page.on("request", (req) => {
       if (
@@ -51,7 +50,7 @@ export async function analyzeWebsite(url: string) {
       }
     });
 
-    await page.goto(url, { waitUntil: "load", timeout: 15000 });
+    await page.goto(url, { waitUntil: "load", timeout: 30000 });
 
     const performanceMetrics = await page.evaluate(() => {
       const perfData = window.performance;
@@ -178,7 +177,7 @@ export async function analyzeWebsite(url: string) {
         setTimeout(() => {
           observer.disconnect();
           resolve(entries);
-        }, 1000);
+        }, 1000); // Reduced to 1s
       });
     });
 
@@ -199,6 +198,13 @@ export async function analyzeWebsite(url: string) {
     console.error("Puppeteer error:", error);
     throw error;
   } finally {
-    if (browser) await browser.close();
+    if (browser) {
+      try {
+        await browser.close();
+        console.log("Puppeteer browser instance closed successfully");
+      } catch (closeError) {
+        console.error("Error closing Puppeteer browser instance:", closeError);
+      }
+    }
   }
 }

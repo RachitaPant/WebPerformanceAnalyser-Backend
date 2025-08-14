@@ -9,8 +9,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use((req, res, next) => {
-  req.setTimeout(60000); // 60s timeout
-  next();
+  req.setTimeout(60000);
 });
 
 app.post("/analyze", async (req: Request, res: Response) => {
