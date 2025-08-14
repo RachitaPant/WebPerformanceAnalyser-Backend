@@ -1,0 +1,6 @@
+nohup: ignoring input
+
+> web-performance-analyser@1.0.0 start
+> node dist/index.js
+
+Analysis backend listening on port 8080
