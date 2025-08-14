@@ -1,0 +1,13 @@
+2025-08-14 14:27:28: Analysis backend listening on port 8080
+2025-08-14 14:28:01: Puppeteer executablePath: /tmp/chromium
+2025-08-14 14:28:06: Lighthouse chromePath: /tmp/chromium
+2025-08-14 14:29:53: Puppeteer executablePath: /tmp/chromium
+2025-08-14 14:30:01: Lighthouse chromePath: /tmp/chromium
+2025-08-14 14:32:00: Puppeteer executablePath: /tmp/chromium
+2025-08-14 14:32:08: Lighthouse chromePath: /tmp/chromium
+2025-08-14 14:33:12: Puppeteer executablePath: /tmp/chromium
+2025-08-14 14:33:19: Lighthouse chromePath: /tmp/chromium
+2025-08-14 15:24:59: Puppeteer executablePath: /tmp/chromium
+2025-08-14 15:25:05: Lighthouse chromePath: /tmp/chromium
+2025-08-14 16:20:55: Puppeteer executablePath: /tmp/chromium
+2025-08-14 16:21:01: Lighthouse chromePath: /tmp/chromium
